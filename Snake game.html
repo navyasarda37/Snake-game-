@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    canvas {
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="snakeCanvas" width="400" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById("snakeCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const boxSize = 20;
+    let snake = [{ x: 10, y: 10 }];
+    let direction = "right";
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < snake.length; i++) {
+        ctx.fillStyle = i === 0 ? "#4CAF50" : "#2E7D32";
+        ctx.fillRect(snake[i].x * boxSize, snake[i].y * boxSize, boxSize, boxSize);
+      }
+    }
+
+    function move() {
+      let headX = snake[0].x;
+      let headY = snake[0].y;
+
+      if (direction === "right") headX++;
+      else if (direction === "left") headX--;
+      else if (direction === "up") headY--;
+      else if (direction === "down") headY++;
+
+      const newHead = { x: headX, y: headY };
+      snake.unshift(newHead);
+      snake.pop();
+    }
+
+    function changeDirection(e) {
+      if (e.key === "ArrowUp" && direction !== "down") direction = "up";
+      else if (e.key === "ArrowDown" && direction !== "up") direction = "down";
+      else if (e.key === "ArrowLeft" && direction !== "right") direction = "left";
+      else if (e.key === "ArrowRight" && direction !== "left") direction = "right";
+    }
+
+    function gameLoop() {
+      draw();
+      move();
+    }
+
+    document.addEventListener("keydown", changeDirection);
+    setInterval(gameLoop, 100); // Adjust the speed by changing the interval time
+  </script>
+</body>
+</html>
